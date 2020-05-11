@@ -27,6 +27,5 @@ const Task = mongoose.model('Todos', TaskSchema, "task");
 // });
 
 module.exports = {
-    TaskSchema,
     Task
 };

@@ -20,6 +20,8 @@ router.get('/all', (req, res) => {
         res.send(doc);
     }).catch((err) => {
         res.status(503).send({ message: "Services Unavailable" });
+        console.log(err);
+
     });
 });
 router.get('/one', ...TODO.GetTodo, validateRequest, (req, res) => {
@@ -27,7 +29,7 @@ router.get('/one', ...TODO.GetTodo, validateRequest, (req, res) => {
         if (!doc) {
             res.status(404).send({ message: 'Todo not found' });
         }
-        res.send(doc);
+        res.status(200).send(doc);
     }).catch((err) => {
         res.status(503).send({ message: "Services Unavailable" });
     });

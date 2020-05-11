@@ -115,7 +115,7 @@ document.addEventListener("keyup", function (event) {
                     console.log(response);
                 }
             }).catch(error => {
-                console.log(error)
+                console.log(error);
             });
         }
         input.value = "";
@@ -129,7 +129,7 @@ function completeToDo(element) {
     const id = element.attributes.id.value;
     console.log(id);
     const name = element.parentNode.querySelector(".text").innerText;
-    const done = element.classList.value == "fa co fa-check-circle" ? true : false;
+    const done = element.classList.value == "fa co fa-check-circle" ? false : true;
     console.log(done);
     console.log(name);
 

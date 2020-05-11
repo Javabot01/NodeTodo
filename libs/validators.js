@@ -11,10 +11,6 @@ const VALIDATORS = {
             [
                 query('id').exists().withMessage("Id is required").isMongoId().withMessage('Id passed is invalid')
             ],
-        GetTask:
-            [
-                query('idTask').exists().withMessage("Id is required")
-            ],
         UpdateTodo:
             [
                 param('id').exists().withMessage("Id is required").isMongoId().withMessage("Id is invalid"),
