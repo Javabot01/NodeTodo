@@ -54,12 +54,12 @@ router.patch('/update/:id', ...TODO.UpdateTodo, validateRequest, (req, res) => {
 
 router.delete('/delete/:id', ...TODO.DeleteTodo, validateRequest, (req, res) => {
     Task.findByIdAndDelete(req.params.id).then((doc) => {
-        console.log(doc);
+        // console.log(doc);
 
         if (!doc) {
             res.status(404).send({ message: 'Todo not found' });
         }
-        console.log("Document deleted", doc);
+        // console.log("Document deleted", doc);
         res.send({ message: 'Todo successfully deleted' });
     }).catch((err) => {
         res.status(503).send({ message: "Services Unavailable" });
