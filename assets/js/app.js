@@ -89,7 +89,8 @@ function addToDo(todo, docId, done, trash) {
     const item = `<li class="item" id='${docId}'>
                     <i class="fa co ${DONE}" id=${docId}  job="complete" id="${docId}"></i>
                     <p class="text ${LINE}" id="todo${docId}">${todo}</p>
-                <i class="fa fa-trash-o de" job="delete" id="${docId}"></i>
+                    <i class="fa fa-trash-o de" job="delete" id="${docId}"></i>
+                    <i class="fa fa-edit de" style="float: right; margin-right: 2rem;" job ="edit" id="todo${docId}"></i>
                 </li >
     `;
 
@@ -114,6 +115,12 @@ document.addEventListener("keyup", function (event) {
                 else {
                     console.log(response);
                 }
+                iziToast.success({
+                    title: 'OK',
+                    message: 'Successfully inserted record!',
+                    position: 'center',
+                    timeout: 5000,
+                });
             }).catch(error => {
                 console.log(error);
             });
@@ -155,6 +162,42 @@ function removeToDo(element) {
     });
 }
 
+const editTodo = (element) => {
+    const id = element.attributes.id.value;
+    console.log(id);
+    const name = element.parentNode.querySelector(".text").innerText;
+
+    iziToast.info({
+        timeout: 20000,
+        overlay: true,
+        displayMode: 'once',
+        id: 'inputs',
+        zindex: 999,
+        title: 'Edit Todo',
+        message: 'Check',
+        position: 'center',
+        close: false,
+        drag: false,
+        inputs: [
+            ['<input type="checkbox" required>', 'change', function (instance, toast, input, e) {
+                console.info(input.checked);
+            }],
+            ['<input type="text">', 'keyup', function (instance, toast, input, e) {
+                console.info(input.value);
+            }, true]
+            // ['<input type="number">', 'keydown', function (instance, toast, input, e) {
+            //     console.info(input.value);
+            // }],
+        ],
+        onClosing: function (instance, toast, closedBy) {
+            console.info('Closing | closedBy: ' + closedBy);
+        },
+        onClosed: function (instance, toast, closedBy) {
+            console.info('Closed | closedBy: ' + closedBy);
+        }
+    });
+};
+
 // target the items created dynamically
 
 list.addEventListener("click", function (event) {
@@ -165,7 +208,41 @@ list.addEventListener("click", function (event) {
     if (elementJob == "complete") {
         completeToDo(element);
     } else if (elementJob == "delete") {
-        removeToDo(element);
+        iziToast.question({
+            timeout: 20000,
+            close: false,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'Hey',
+            message: 'Are you sure about that?',
+            position: 'center',
+            buttons: [
+                ['<button><b>YES</b></button>', function (instance, toast) {
+
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+
+                    removeToDo(element);
+
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+
+                }],
+            ],
+            onClosing: function (instance, toast, closedBy) {
+                console.info('Closing | closedBy: ' + closedBy);
+            },
+            onClosed: function (instance, toast, closedBy) {
+                console.info('Closed | closedBy: ' + closedBy);
+            }
+        });
+    }
+
+    else if (elementJob == "edit") {
+        editTodo(element);
     }
 
     // add item to localstorage ( this code must be added where the LIST array is updated)
