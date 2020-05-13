@@ -16,7 +16,7 @@ describe('Todo CRUD API', () => {
     });
     test('Get One Todo', async () => {
         const task = await Task.findOne();
-        console.log(task);
+        // console.log(task.id);
 
         if (!task) {
             return;
@@ -38,30 +38,37 @@ describe('Todo CRUD API', () => {
         expect(response.status).toBe(200);
         expect(typeof response.body).toBe('object');
         expect(todo.name).toBe(data.name);
-        // await todo.remove();
+        await todo.remove();
     });
-    // test('Delete Todo', async () => {
-    //     const task = await Task.findOne();
-    //     // console.log(task);
-    //     const response = await request(app).delete(`/todo/delete/${task.id}`);
-    //     expect(response.status).toBe(200);
-    //     expect(typeof response.body).toBe('object');
-    // });
-    // test('Update Todo', async () => {
-    //     const task = await Task.findOne();
-    //     console.log(task);
+    test('Delete Todo', async () => {
+        // const task = await Task.findOne();
+        // console.log(task);
+        const now = Date.now();
+        const data = {
+            name: `My test todo created at ${now}`
+        };
+        const task = await request(app).post('/todo/create').send(data);
+        // console.log(task.body);
 
-    //     if (!task) {
-    //         return;
-    //     }
+        const response = await request(app).delete(`/todo/delete/${task.body._id}`);
+        expect(response.status).toBe(200);
+        expect(typeof response.body).toBe('object');
+    });
+    test('Update Todo', async () => {
+        const task = await Task.findOne();
+        // console.log(task);
 
-    //     const data = {
-    //         name: `My test todo recreated at `
-    //     };
-    //     const response = await request(app).patch(`/todo/update/${task.id}`, data, { new: true });
-    //     const todo = await Task.findOne({ name: data.name });
-    //     expect(response.status).toBe(201);
-    //     expect(typeof response.body).toBe('object');
-    //     expect(todo.name).toBe(data.name);
-    // });
+        if (!task) {
+            return;
+        }
+        const data = {
+            name: 'My test todo recreated at',
+            done: true
+        };
+        const response = await request(app).patch(`/todo/update/${task.id}`).send(data);
+        // console.log(response);
+
+        expect(response.status).toBe(201);
+        expect(typeof response.body).toBe('object');
+    });
 });
