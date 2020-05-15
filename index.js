@@ -1,6 +1,6 @@
 //jshint esversion:8
 const { app } = require('./app');
-const { App } = require('./config')
+const { App } = require('./config');
 
 app.listen(App.PORT, () => {
     console.log('Server started on port: ', App.PORT);

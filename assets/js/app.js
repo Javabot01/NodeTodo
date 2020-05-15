@@ -88,9 +88,9 @@ function addToDo(todo, docId, done, trash) {
 
     const item = `<li class="item" id='${docId}'>
                     <i class="fa co ${DONE}" id=${docId}  job="complete" id="${docId}"></i>
-                    <p class="text ${LINE}" id="todo${docId}">${todo}</p>
+                    <p class="text ${LINE}" id="${docId}">${todo}</p>
                     <i class="fa fa-trash-o de" job="delete" id="${docId}"></i>
-                    <i class="fa fa-edit de" style="float: right; margin-right: 2rem;" job ="edit" id="todo${docId}"></i>
+                    <i class="fa fa-edit de" style="float: right; margin-right: 2rem;" job ="edit" id="${docId}"></i>
                 </li >
     `;
 
@@ -166,34 +166,54 @@ const editTodo = (element) => {
     const id = element.attributes.id.value;
     console.log(id);
     const name = element.parentNode.querySelector(".text").innerText;
+    // const data = [];
 
     iziToast.info({
-        timeout: 20000,
+        timeout: 200000,
         overlay: true,
         displayMode: 'once',
         id: 'inputs',
         zindex: 999,
         title: 'Edit Todo',
-        message: 'Check',
+        // message: 'Check',
         position: 'center',
-        close: false,
+        close: true,
         drag: false,
         inputs: [
-            ['<input type="checkbox" required>', 'change', function (instance, toast, input, e) {
-                console.info(input.checked);
-            }],
-            ['<input type="text">', 'keyup', function (instance, toast, input, e) {
-                console.info(input.value);
+            [`<input type="text" value=${name}>`, 'change', function text(instance, toast, input, e) {
+                let newName = input.value;
+                console.log(newName);
+                // let newDone;
+                // if (data.length) {
+                //     newDone = data[0];
+                // }
+                // else {
+                //     newDone = false;
+                // }
+
+                http.patch(`/todo/update/${id}`, {
+                    name: newName,
+                    done: false
+                }).then((doc) => {
+                    console.log(doc);
+                    element.parentNode.querySelector(".text").innerText = newName;
+                });
+                instance.hide({ transitionOut: 'fadeOut' }, toast, 'input');
             }, true]
+            // [`<input type="checkbox" Confirm: required>`, 'change', function done(instance, toast, input, e) {
+            //     console.info(input.checked);
+            //     if (input.checked) {
+            //         let done = input.checked;
+            //         data.push(done);
+            //     }
+            //     // data.push(done);;
+            // }]
             // ['<input type="number">', 'keydown', function (instance, toast, input, e) {
             //     console.info(input.value);
             // }],
         ],
-        onClosing: function (instance, toast, closedBy) {
-            console.info('Closing | closedBy: ' + closedBy);
-        },
         onClosed: function (instance, toast, closedBy) {
-            console.info('Closed | closedBy: ' + closedBy);
+            console.info('Closing | closedBy: ' + closedBy);
         }
     });
 };
@@ -243,6 +263,7 @@ list.addEventListener("click", function (event) {
 
     else if (elementJob == "edit") {
         editTodo(element);
+
     }
 
     // add item to localstorage ( this code must be added where the LIST array is updated)
