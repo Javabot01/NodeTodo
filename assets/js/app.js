@@ -14,21 +14,6 @@ const UNCHECK = "fa-circle-thin";
 const LINE_THROUGH = "lineThrough";
 
 // Variables
-// let LIST, id;
-
-// // get item from localstorage
-// let data = localStorage.getItem("TODO");
-
-// // check if data is not empty
-// if (data) {
-//     LIST = JSON.parse(data);
-//     id = LIST.length; // set the id to the last one in the list
-//     loadList(LIST); // load the list to the user interface
-// } else {
-//     // if data isn't empty
-//     LIST = [];
-//     id = 0;
-// }
 
 const http = axios.create({
     baseURL: BASE_URL
@@ -147,7 +132,7 @@ function completeToDo(element) {
     }).then((res) => {
         element.classList.toggle(CHECK);
         element.classList.toggle(UNCHECK);
-        element.parentNode.querySelector(".text").classList.toggle(LINE_THROUGH)
+        element.parentNode.querySelector(".text").classList.toggle(LINE_THROUGH);
     });
 }
 
@@ -166,7 +151,6 @@ const editTodo = (element) => {
     const id = element.attributes.id.value;
     console.log(id);
     const name = element.parentNode.querySelector(".text").innerText;
-    // const data = [];
 
     iziToast.info({
         timeout: 200000,
@@ -182,14 +166,6 @@ const editTodo = (element) => {
         inputs: [
             [`<input type="text" value=${name}>`, 'change', function text(instance, toast, input, e) {
                 let newName = input.value;
-                console.log(newName);
-                // let newDone;
-                // if (data.length) {
-                //     newDone = data[0];
-                // }
-                // else {
-                //     newDone = false;
-                // }
 
                 http.patch(`/todo/update/${id}`, {
                     name: newName,
@@ -200,17 +176,6 @@ const editTodo = (element) => {
                 });
                 instance.hide({ transitionOut: 'fadeOut' }, toast, 'input');
             }, true]
-            // [`<input type="checkbox" Confirm: required>`, 'change', function done(instance, toast, input, e) {
-            //     console.info(input.checked);
-            //     if (input.checked) {
-            //         let done = input.checked;
-            //         data.push(done);
-            //     }
-            //     // data.push(done);;
-            // }]
-            // ['<input type="number">', 'keydown', function (instance, toast, input, e) {
-            //     console.info(input.value);
-            // }],
         ],
         onClosed: function (instance, toast, closedBy) {
             console.info('Closing | closedBy: ' + closedBy);
@@ -222,7 +187,6 @@ const editTodo = (element) => {
 
 list.addEventListener("click", function (event) {
     const element = event.target; // return the clicked element inside list
-    // const element1 = event.target(nextElementSibling); // return the clicked element inside list
     const elementJob = element.attributes.job.value; // complete or delete
 
     if (elementJob == "complete") {
@@ -263,11 +227,7 @@ list.addEventListener("click", function (event) {
 
     else if (elementJob == "edit") {
         editTodo(element);
-
     }
-
-    // add item to localstorage ( this code must be added where the LIST array is updated)
-    // localStorage.setItem("TODO", JSON.stringify(LIST));
 });
 
 
